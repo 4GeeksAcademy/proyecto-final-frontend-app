@@ -11,8 +11,12 @@ function Recipes() {
   const [aiRecipe, setAiRecipe] = useState(''); // Estado para la receta generada por IA
   const [loading, setLoading] = useState(false); // Estado de carga
   const [error, setError] = useState(''); // Estado de errores
+  const [alert, setAlert] = useState({ show: false, type: '', message: '' });
 
-
+  const showAlert = (type, message) => {
+    setAlert({ show: true, type, message });
+    setTimeout(() => setAlert({ show: false, type: '', message: '' }), 2000);
+  };
 
   const handleSearchAI = async () => {
     setLoading(true);
@@ -38,7 +42,7 @@ function Recipes() {
     console.log('parsedRecipe:', parsedRecipe);
     try {
       if (!parsedRecipe) {
-        alert('La receta no está disponible.');
+        showAlert('danger', 'La receta no está disponible');
         return;
       }
 
@@ -48,6 +52,7 @@ function Recipes() {
         descripcion: parsedRecipe.description,
         pasos: parsedRecipe.steps.join('\n'),
         calorias: parsedRecipe.calories,
+        url: parsedRecipe.url,
         nutrientes: parsedRecipe.nutritional_values.join('\n'),
         tiempo_elaboracion: parsedRecipe.prep_time,
       };
@@ -55,10 +60,10 @@ function Recipes() {
       console.log('Datos enviados:', recipeData);
 
       const response = await api.post('/recipe/save', recipeData);
-      alert(response.data.message);
+      showAlert('success', 'Receta guardada con éxito');
     } catch (error) {
       console.error("Error al guardar la receta:", error);
-      alert('Error al guardar la receta.');
+      showAlert('danger', 'Error al guardar la receta');
     }
   };
 
@@ -67,6 +72,14 @@ function Recipes() {
       <div className="d-flex flex-grow-1">
         <Sidebar />
         <div className="w-100 content">
+          {alert.show && (
+            <div className="alert-overlay"
+              onClick={() => setAlert({ show: false, type: '', message: '' })}>
+              <div className={`alert alert-${alert.type}`} role="alert">
+                {alert.message}
+              </div>
+            </div>
+          )}
           <h2 className="mt-2 mb-4 text-center">¿Qué cocinamos hoy?</h2>
           {/* Buscador */}
           <div>
@@ -97,47 +110,53 @@ function Recipes() {
           </div>
           {/* Resultado de la receta */}
           {aiRecipe && (
-            <div className="recipe-card">
-              <h3 className="recipe-title">{parsedRecipe.name}</h3>
-
-              <div className="recipe-section">
-                <p><strong>Descripción:</strong> {parsedRecipe.description}</p>
+            <div className="recipe-card-horizontal">
+              <div className="recipe-header">
+                <img className="recipe-image" src={parsedRecipe.image} alt="ai-chef" />
+                <div className="recipe-info">
+                  <h3 className="recipe-title">{parsedRecipe.name}</h3>
+                  <p><strong>Descripción:</strong> {parsedRecipe.description}</p>
+                </div>
               </div>
 
-              <div className="recipe-section">
-                <p><strong>Ingredientes:</strong></p>
-                <ul>
-                  {parsedRecipe.ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient}</li>
-                  )) || '<li>No especificados</li>'}
-                </ul>
-              </div>
-
-              <div className="recipe-section">
-                <p><strong>Pasos:</strong></p>
-                <ol>
-                  {parsedRecipe.steps.map((step, index) => (
-                    <li key={index}>{step}</li>
-                  )) || '<li>No especificados</li>'}
-                </ol>
-              </div>
-              <div className="recipe-section">
-                <p><strong>Valores nutricionales:</strong></p>
-                <ol>
-                  {parsedRecipe.nutritional_values.map((e, index) => (
-                    <li key={index}>{e}</li>
-                  )) || '<li>No especificados</li>'}
-                </ol>
-              </div>
-              <div className="recipe-section">
-                <div className="d-flex justify-content-between">
-                  <p><strong>Calorías:</strong> {parsedRecipe.calories || 'No especificadas'}</p>
-                  <p><strong>Tiempo de preparación:</strong> {parsedRecipe.prep_time || 'No especificado'}</p>
+              <div className="recipe-content">
+                <div className="recipe-section">
+                  <p><strong>Ingredientes:</strong></p>
+                  <ul>
+                    {parsedRecipe.ingredients.map((ingredient, index) => (
+                      <li key={index}>{ingredient}</li>
+                    )) || '<li>No especificados</li>'}
+                  </ul>
                 </div>
 
-                <button className='btn btn-success' onClick={saveRecipe}>Guardar receta</button>
-                <img className="img-chef me-4" src={parsedRecipe.image} alt="ai-chef" />
+                <div className="recipe-section">
+                  <p><strong>Pasos:</strong></p>
+                  <ol>
+                    {parsedRecipe.steps.map((step, index) => (
+                      <li key={index}>{step}</li>
+                    )) || '<li>No especificados</li>'}
+                  </ol>
+                </div>
 
+                <div className="recipe-section">
+                  <div className="recipe-details">
+                    <div className="d-flex flex-column">
+                      <p><strong>Valores nutricionales:</strong></p>
+                      <ul>
+                        {parsedRecipe.nutritional_values.map((value, index) => (
+                          <li key={index}>{value}</li>
+                        )) || '<li>No especificados</li>'}
+                      </ul>
+                    </div>
+                    <p><strong>Calorías:</strong> {parsedRecipe.calories || 'No especificadas'}</p>
+                    <p><strong>Tiempo de preparación:</strong> {parsedRecipe.prep_time || 'No especificado'}</p>
+                  </div>
+                </div>
+
+              </div>
+
+              <div className="recipe-footer">
+                <button className="btn btn-success" onClick={saveRecipe}>Guardar receta</button>
               </div>
             </div>
           )}

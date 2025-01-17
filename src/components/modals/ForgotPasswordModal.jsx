@@ -54,3 +54,4 @@ ForgotPasswordModal.propTypes = {
 };
 
 export default ForgotPasswordModal;
+

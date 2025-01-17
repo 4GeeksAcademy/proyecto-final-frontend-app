@@ -4,6 +4,7 @@ import Sidebar from '../components/layout/Sidebar';
 import UserContext from '../context/UserContext';
 import '../styles/Profile.css';
 import Footer from '../components/layout/Footer';
+import logo from '/logo-solo.png';
 
 function Profile() {
   const { user, logout } = useContext(UserContext); // Consumir el contexto
@@ -94,7 +95,7 @@ function Profile() {
             <div className="profile-header text-center">
               {/* Imagen del Usuario */}
               <img
-                src={userData.foto_url || 'https://via.placeholder.com/100'}
+                src={userData.foto_url || logo }
                 alt="Perfil"
                 className="profile-img mb-3"
               />

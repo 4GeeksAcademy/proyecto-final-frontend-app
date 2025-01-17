@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../components/layout/Sidebar';
 import api from '../services/api.js';
 import { useNavigate } from 'react-router-dom';
+import '../styles/savedRecipes.css'
 
 const getSavedRecipes = async () => {
   const response = await api.get('/recipe/saved');
@@ -14,10 +15,17 @@ const deleteRecipe = async (id) => {
 };
 
 const SavedRecipes = () => {
-  const [savedRecipes, setSavedRecipes] = useState([]); // Estado para las recetas
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [error, setError] = useState(null); // Estado para errores
+  const [savedRecipes, setSavedRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [alert, setAlert] = useState({ show: false, type: '', message: '' });
+
+  const showAlert = (type, message) => {
+    setAlert({ show: true, type, message });
+    setTimeout(() => setAlert({ show: false, type: '', message: '' }), 2000);
+  };
+
 
   // Función para cargar recetas guardadas
   const fetchSavedRecipes = async () => {
@@ -40,7 +48,7 @@ const SavedRecipes = () => {
       setSavedRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.id !== id)
       );
-      alert('Receta eliminada con exito.')
+      showAlert('success', 'Receta eliminada con éxito');
     } catch (err) {
       console.error('Error al eliminar la receta:', err);
     }
@@ -54,7 +62,15 @@ const SavedRecipes = () => {
     <div>
       <Sidebar />
 
-      <div className="saved-recipes w-100 content">
+      <div className="saved-recipes content">
+        {alert.show && (
+          <div className="alert-overlay"
+            onClick={() => setAlert({ show: false, type: '', message: '' })}>
+            <div className={`alert alert-${alert.type}`} role="alert">
+              {alert.message}
+            </div>
+          </div>
+        )}
         <h2 className="text-center my-4">Recetas Guardadas</h2>
         {loading ? (
           <p>Cargando recetas...</p>

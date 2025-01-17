@@ -33,12 +33,13 @@
   overflow: hidden;
   transition: width 0.3s ease;
   filter: drop-shadow(1px 0 0.2rem rgba(0, 0, 0, 0.466));
-
+  color: #F4A261;
 }
 
 .sidebar-container:hover {
   width: 220px;
   filter: drop-shadow(2px 0 0.3rem rgba(0, 0, 0, 0.466));
+  color: black;
 }
 
 /* Estilo del Sidebar */

@@ -14,11 +14,11 @@ function RecipeCards() {
 
   const settings = {
     dots: true, // 
-    infinite: true, 
-    speed: 500, 
+    infinite: true,
+    speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 1, 
-    autoplay: true, 
+    slidesToScroll: 1,
+    autoplay: true,
     autoplaySpeed: 3000,
     responsive: [
       {
@@ -51,9 +51,13 @@ function RecipeCards() {
     <div className="recipe-slider mb-5">
       <Slider {...settings}>
         {recipes.map((recipe) => (
-          <div key={recipe.id} className="p-3">
+          <div
+            key={recipe.id}
+            className="p-3">
             <div className="card">
-              <img src={recipe.image} alt={recipe.title} className="card-img-top" />
+              <img src={recipe.image}
+                alt={recipe.title}
+                className="card-img-top" />
               <div className="card-body">
                 <h5 className="card-title">{recipe.title}</h5>
                 <a href={`/recipes/${recipe.id}`} className="btn btn-success">

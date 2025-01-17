@@ -66,6 +66,7 @@ function RegistrationModal({ show, onClose }) {
           apellidos: formData.apellidos,
           nombre_usuario: formData.nombre_usuario,
           email: formData.email,
+          token: access_token,
         });
 
         setSuccess('Usuario registrado correctamente');
@@ -128,81 +129,28 @@ function RegistrationModal({ show, onClose }) {
               onChange={handleChange}
             />
 
-
-        {/* Cuerpo */}
-        <div className="modal-body" style={{ backgroundImage: 'url("/Designer.jpg")' }}>
-          {error && <p className="text-danger">{error}</p>}
-          {success && <p className="text-success">{success}</p>}
-
-          {/* Nombre */}
-          <input
-            type="text"
-            name="nombre"
-            placeholder="Nombre"
-            className="form-control mb-2"
-            value={formData.nombre}
-            onChange={handleChange}
-          />
-
-          {/* Apellidos */}
-          <input
-            type="text"
-            name="apellidos"
-            placeholder="Apellidos"
-            className="form-control mb-2"
-            value={formData.apellidos}
-            onChange={handleChange}
-          />
-
-          {/* Nombre de Usuario */}
-          <input
-            type="text"
-            name="nombre_usuario"
-            placeholder="Nombre de Usuario"
-            className="form-control mb-2"
-            value={formData.nombre_usuario}
-            onChange={handleChange}
-          />
-
-          {/* Correo */}
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo"
-            className="form-control mb-2"
-            value={formData.email}
-            onChange={handleChange}
-          />
-
-          {/* Contraseña */}
-          <div className="input-group mb-2">
+            {/* Nombre de Usuario */}
             <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              placeholder="Contraseña"
-              className="form-control"
-              value={formData.password}
-              onChange={handleChange}
-              autoComplete="current-password"
-            />
-            <button
-              className="btn btn-outline-success"
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? 'Ocultar' : 'Mostrar'}
-            </button>
-          </div>
-
-          {/* Recordar */}
-          <div className="form-check mb-2">
-            <input
-              type="checkbox"
-              name="remember"
-              className="form-check-input"
-              checked={formData.remember}
+              type="text"
+              name="nombre_usuario"
+              placeholder="Nombre de Usuario"
+              className="form-control mb-2"
+              value={formData.nombre_usuario}
               onChange={handleChange}
             />
+
+
+            {/* Correo */}
+            <input
+              type="email"
+              name="email"
+              placeholder="Correo"
+              className="form-control mb-2"
+              value={formData.email}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+
 
             {/* Contraseña */}
             <div className="input-group mb-2">
@@ -213,7 +161,8 @@ function RegistrationModal({ show, onClose }) {
                 className="form-control"
                 value={formData.password}
                 onChange={handleChange}
-                autoComplete="current-password"
+                autoComplete="off"
+
               />
               <button
                 className="btn btn-outline-success"
@@ -237,8 +186,6 @@ function RegistrationModal({ show, onClose }) {
             </div>
 
           </div>
-        </div>
-
 
           {/* Pie */}
           <div className="modal-footer" style={{ backgroundColor: '#F4A261' }}>
@@ -246,18 +193,16 @@ function RegistrationModal({ show, onClose }) {
               Registrar
             </button>
           </div>
-
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
 
 // Validación de Props
 RegistrationModal.propTypes = {
-show: PropTypes.bool.isRequired,
-onClose: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default RegistrationModal;
