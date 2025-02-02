@@ -7,6 +7,7 @@ import api from './api';
  * @throws {Error} - Lanza un error si falla la solicitud.
  */
 export const generateRecipeWithAI = async (prompt) => {
+  console.log("Enviando al backend:", { prompt });
   try {
     const response = await api.post('/ai/generate', { prompt });
     return {
@@ -25,3 +26,17 @@ export const generateRecipeWithAI = async (prompt) => {
   }
 };
 
+export const chatWithAI = async (chatHistory, prompt) => {
+  console.log("Enviando al backend:", { prompt, history: chatHistory });
+  try {
+    const response = await api.post('/ai/chat', { 
+      prompt, 
+      history: chatHistory 
+    });
+    console.log(response.data.response)
+    return response.data.response;
+  } catch (error) {
+    console.error('Error en el chat con la IA:', error);
+    throw error;
+  }
+};
